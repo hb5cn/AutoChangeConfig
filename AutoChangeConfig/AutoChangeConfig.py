@@ -121,23 +121,24 @@ class AutoChangeConfig(object):
                     # print begin_num_list
                     # print '++++'
                     # print end_num_list
+                    print str(cfg_content[begin_num:end_first_num])
 
                 else:
                     break
 
-            del(begin_num_list[0])
-            for i in range(0, len(begin_num_list)):
-                with open(path, 'r') as fr:
-                    cfg_content3 = fr.read()
-                tmpfile_path = os.path.join(self.home, 'temp')
-                with open(tmpfile_path, 'w') as fw:
-                    fw.write(str(cfg_content[begin_num_list[i]:end_num_list[i]]))
-                self.modifyotherfile(tmpfile_path, changed)
-                with open(tmpfile_path, 'r') as fr:
-                    fr_str = fr.read()
-                print fr_str
-                with open(path, 'w') as fw:
-                    fw.write(str(cfg_content3).replace('autochangeconfig%d' % (i + 1), fr_str))
+            # del(begin_num_list[0])
+            # for i in range(0, len(begin_num_list)):
+            #     with open(path, 'r') as fr:
+            #         cfg_content3 = fr.read()
+            #     tmpfile_path = os.path.join(self.home, 'temp')
+            #     with open(tmpfile_path, 'w') as fw:
+            #         fw.write(str(cfg_content[begin_num_list[i]:end_num_list[i]]))
+            #     self.modifyotherfile(tmpfile_path, changed)
+            #     with open(tmpfile_path, 'r') as fr:
+            #         fr_str = fr.read()
+            #     # print fr_str
+            #     with open(path, 'w') as fw:
+            #         fw.write(str(cfg_content3).replace('autochangeconfig%d' % (i + 1), fr_str))
             self.loggerchangeconfig.info('modify ini file \"%s\" done' % path)
         else:
             self.loggerchangeconfig.info('Begin modify ini file')
