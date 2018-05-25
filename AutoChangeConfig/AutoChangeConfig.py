@@ -61,8 +61,8 @@ class AutoChangeConfig(object):
                 self.modifycfg(path, changed)
             else:
                 self.loggerchangeconfig.error('There is no suffix matching, Please check the configuration file')
-        except Exception, c:
-            if c:
+        except Exception, dispatch_err:
+            if dispatch_err:
                 self.loggerchangeconfig.error(traceback.format_exc())
 
     def modifyproperties(self, path, changed):
@@ -155,16 +155,42 @@ class AutoChangeConfig(object):
         self.loggerchangeconfig.info('modify cfg file \"%s\" done' % path)
 
     def modifyxml(self, path, changed):
+        changed_list = []
+        original_list = []
         self.loggerchangeconfig.info('Begin modify xml file')
         self.loggerchangeconfig.info('The modify xml file is \"%s\"' % path)
-        self.loggerchangeconfig.info(changed)
+        with open(path, 'r') as fr:
+            b_list = fr.readlines()
+        for change_str in changed:
+            a_list = str(change_str.text).replace('\t', '').splitlines()
+            for a_list_str in a_list:
+                if '' != a_list_str:
+                    changed_list.append(a_list_str)
+            # print len(changed_list)
+            # print changed_list
+            for b_list_str in b_list:
+                if '' != b_list_str:
+                    original_list.append(b_list_str.replace('\t', '').replace('\n', '').lstrip().rstrip())
+
+            for i in range(0, len(changed_list)):
+                # for changed_list_str in changed_list:
+                #     print changed_list_str
+                try:
+                    # pass
+                    # print original_list
+                    print original_list.index(changed_list[i])
+                    print original_list[original_list.index(changed_list[i])]
+                    # i += 1
+                    # break
+                except Exception, xml_err:
+                    if xml_err:
+                        pass
 
     def modifyotherfile(self, path, changed):
         cfg_content_new = ''
         with open(path, 'r') as f:
             cfg_content = f.readlines()
         for change_str in changed:
-            self.loggerchangeconfig.info('Now modify %s' % str(change_str.text))
             if '' != cfg_content_new:
                 cfg_content = cfg_content_new
             # print '--->' + str(cfg_content) + '<---'
@@ -189,6 +215,7 @@ class AutoChangeConfig(object):
             find_key = 'false'
             try:
                 if str(replacestr).split(symbol)[1]:
+                    self.loggerchangeconfig.info('Now modify %s' % str(str(replacestr).split(symbol)[0]))
                     for i in range(0, len(originalcontent)):
                         # Look for a similar string in each line
                         begin_num = str(originalcontent[i]).find(str(replacestr).split(symbol)[0] + symbol)
@@ -201,12 +228,13 @@ class AutoChangeConfig(object):
                     if 'false' == find_key:
                         # print '>>>' + str(replacestr) + '<<<'
                         # print originalcontent
+                        self.loggerchangeconfig.info('Now add %s' % str(replacestr))
                         originalcontent.append('\n' + str(replacestr))
                     find_separator = 'true'
                 if 'true' == find_separator:
                     break
-            except Exception, d:
-                if d:
+            except Exception, replace_err:
+                if replace_err:
                     pass
         return originalcontent
 
@@ -219,8 +247,8 @@ class AutoChangeConfig(object):
                 sys.exit()
             else:
                 self.readconfig()
-        except Exception, b:
-            if b:
+        except Exception, main_err:
+            if main_err:
                 self.readconfig()
 
 
