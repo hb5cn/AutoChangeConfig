@@ -75,7 +75,7 @@ class AutoChangeConfig(object):
         if modify_node.find('nodename') is not None:
             begin_num = 0
             n = 0
-            begin_num_list = [0]
+            begin_num_list_tmp = [0]
             end_num_list = []
             node_str = '[' + str(modify_node.find('nodename').text) + ']'
             self.loggerchangeconfig.info('Begin modify ini file')
@@ -86,14 +86,13 @@ class AutoChangeConfig(object):
                 n += 1
                 with open(path, 'r') as fr:
                     cfg_content2 = fr.read()
-                if str(cfg_content2)[begin_num_list[-1]:].find(node_str) >= 0:
-                    begin_num = int(str(cfg_content2)[begin_num_list[-1]:].find(node_str)) + len(node_str) + begin_num_list[-1]
-                    begin_num_list.append(begin_num)
+                if str(cfg_content2)[begin_num_list_tmp[-1]:].find(node_str) >= 0:
+                    begin_num = int(str(cfg_content2)[begin_num_list_tmp[-1]:].find(node_str)) + len(node_str) + begin_num_list_tmp[-1]
+                    begin_num_list_tmp.append(begin_num)
                     if -1 == str(cfg_content2[begin_num:]).find('['):
-                        end_first_num = len(cfg_content2)
+                        end_num = len(cfg_content2)
                     else:
-                        end_first_num = str(cfg_content2[begin_num:]).find('[') + begin_num
-                    end_num_list.append(end_first_num)
+                        end_num = str(cfg_content2[begin_num:]).find('[') + begin_num
                     # print 'begin_num is %d' % begin_num
                     # print 'end_num: %d' % end_first_num
                     # print '----'
@@ -101,44 +100,47 @@ class AutoChangeConfig(object):
                     # print '++++'
                     # print end_num_list
                     with open(path, 'w') as fw:
-                        fw.write(cfg_content2.replace(cfg_content2[begin_num:end_first_num], '\nautochangeconfig%d\n' % n))
+                        fw.write(cfg_content2.replace(cfg_content2[begin_num:end_num], '\nautochangeconfig%d\n' % n))
 
                 else:
                     break
 
+            begin_num_list = [0]
             while True:
                 if str(cfg_content)[begin_num_list[-1]:].find(node_str) >= 0:
                     begin_num = int(str(cfg_content)[begin_num_list[-1]:].find(node_str)) + len(node_str) + begin_num_list[-1]
                     begin_num_list.append(begin_num)
                     if -1 == str(cfg_content[begin_num:]).find('['):
-                        end_first_num = len(cfg_content)
+                        end_num = len(cfg_content)
                     else:
-                        end_first_num = str(cfg_content[begin_num:]).find('[') + begin_num
-                    end_num_list.append(end_first_num)
+                        end_num = str(cfg_content[begin_num:]).find('[') + begin_num
+                    end_num_list.append(end_num)
                     # print 'begin_num is %d' % begin_num
                     # print 'end_num: %d' % end_first_num
                     # print '----'
                     # print begin_num_list
                     # print '++++'
                     # print end_num_list
-                    print str(cfg_content[begin_num:end_first_num])
+                    # print str(cfg_content[begin_num:end_num])
 
                 else:
                     break
 
-            # del(begin_num_list[0])
-            # for i in range(0, len(begin_num_list)):
-            #     with open(path, 'r') as fr:
-            #         cfg_content3 = fr.read()
-            #     tmpfile_path = os.path.join(self.home, 'temp')
-            #     with open(tmpfile_path, 'w') as fw:
-            #         fw.write(str(cfg_content[begin_num_list[i]:end_num_list[i]]))
-            #     self.modifyotherfile(tmpfile_path, changed)
-            #     with open(tmpfile_path, 'r') as fr:
-            #         fr_str = fr.read()
-            #     # print fr_str
-            #     with open(path, 'w') as fw:
-            #         fw.write(str(cfg_content3).replace('autochangeconfig%d' % (i + 1), fr_str))
+            del(begin_num_list[0])
+            for i in range(0, len(begin_num_list)):
+                with open(path, 'r') as fr:
+                    cfg_content3 = fr.read()
+                tmpfile_path = os.path.join(self.home, 'temp')
+                with open(tmpfile_path, 'w') as fw:
+                    # print str(cfg_content[begin_num_list[i]:end_num_list[i]])
+                    fw.write(str(cfg_content[begin_num_list[i]:end_num_list[i]]))
+                self.modifyotherfile(tmpfile_path, changed)
+                with open(tmpfile_path, 'r') as fr:
+                    fr_str = fr.read()
+                # print fr_str
+                with open(path, 'w') as fw:
+                    fw.write(str(cfg_content3).replace('autochangeconfig%d' % (i + 1), fr_str))
+                os.remove(tmpfile_path)
             self.loggerchangeconfig.info('modify ini file \"%s\" done' % path)
         else:
             self.loggerchangeconfig.info('Begin modify ini file')
@@ -162,6 +164,7 @@ class AutoChangeConfig(object):
         with open(path, 'r') as f:
             cfg_content = f.readlines()
         for change_str in changed:
+            self.loggerchangeconfig.info('Now modify %s' % str(change_str.text))
             if '' != cfg_content_new:
                 cfg_content = cfg_content_new
             # print '--->' + str(cfg_content) + '<---'

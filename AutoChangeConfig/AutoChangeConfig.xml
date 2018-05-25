@@ -43,6 +43,6 @@
         <nodename>API</nodename>
         <change>NoOfReplicas: nihao</change>
         <change>DataMemory: lalalalalalalala</change>
-        <!--<change>Id: xxxxxx</change>-->
+        <change>Id: xxxxxx</change>
     </modify>
 </config>
