@@ -1,0 +1,738 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/context 
+           http://www.springframework.org/schema/context/spring-context-2.5.xsd
+           http://www.springframework.org/schema/aop 
+           http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+           http://www.springframework.org/schema/tx 
+           http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+	<!-- 加载配置文件 -->
+	<bean id="placeholderConfig"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:contract.properties</value>
+				<value>classpath:mail.properties</value>
+				<value>classpath:msg.properties</value>
+				<value>classpath:alipay.properties</value>
+			</list>
+		</property>
+	</bean>
+	<!-- 配置数据源 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName">
+			<value>com.mysql.jdbc.Driver</value>
+		</property>	
+		 			 
+		
+		 <property name="url">
+  			<value>jdbc:mysql://101.200.123.227:3306/xtboss?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;failOverReadOnly=false&amp;maxReconnects=20&amp;useOldAliasMetadataBehavior=true&amp;
+			</value>
+		</property>
+		<property name="username">
+			<value>root</value>
+		</property>
+		<property name="password">
+			<value>union$))</value>
+		</property>
+      
+		<!-- 连接池启动时的初始值 -->
+		<property name="initialSize" value="1" />
+		<!-- 连接池的最大值 -->
+		<property name="maxActive" value="20" />
+		<!-- 最大空闲值.当经过一个高峰时间后，连接池可以慢慢将已经用不到的连接慢慢释放一部分，一直减少到maxIdle为止 -->
+		<property name="maxIdle" value="5" />
+		<!-- 最小空闲值.当空闲的连接数少于阀值时，连接池就会预申请去一些连接，以免洪峰来时来不及申请 -->
+		<property name="minIdle" value="5" />
+		<!-- 在触发回收事件后，在log中打印出回收Connection的错误信息 -->
+		<property name="logAbandoned" value="false" />
+		<!-- 是否自动回收超时连接 -->
+		<property name="removeAbandoned" value="true" />
+		<!-- 超时时间(以秒数为单位) -->
+		<property name="removeAbandonedTimeout" value="60" />
+		<!-- 最大等待时间:当没有可用连接时,连接池等待连接被归还的最大时间(以毫秒计数), -->
+		<property name="maxWait" value="5000" />
+		<!-- 每隔多少时间(以毫秒为单位)去检测一次空闲连接是否超时，默认值为-1，即不开启 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<!-- 空闲逐出连接池的时间(以毫秒为单位) -->
+		<property name="minEvictableIdleTimeMillis" value="120000" />
+		<!-- 在每次空闲逐出连接池的数量 -->
+		<property name="numTestsPerEvictionRun" value="100" />
+		<!-- 打开连接池检查 -->
+		<property name="testWhileIdle" value="true" />
+		<!-- 指明是否在从池中取出连接前进行检验 -->
+		<property name="testOnBorrow" value="true"></property>
+		<!-- SQL查询,用来验证从连接池取出的连接,在将连接返回给调用者之前 -->
+		<property name="validationQuery" value="select 1 from dual"></property>
+	</bean>
+
+
+	<!-- 配置Hibernate -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<property name="mappingResources">
+			<list>
+				<value>
+					com/union400/common/hbm/SysUser.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysStaff.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysUsergroup.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizMsgnumbook.hbm.xml
+				</value>
+				<value>com/union400/common/hbm/BizConfig400.hbm.xml</value>
+				<value>
+					com/union400/common/hbm/BizFreepolicy.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysModule.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizCustomer.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizCustomerfeature.hbm.xml
+				</value>
+			    <value>
+					com/union400/common/hbm/BizBankstatements.hbm.xml
+				</value>	
+				<value>
+					com/union400/common/hbm/BizMsgconfig.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizMsgnumgroup.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysOperatelog.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizValueaddedtype.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizWorksheetfnc.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/LnWorksheetfnc.hbm.xml
+				</value>
+				
+				<value>
+					com/union400/common/hbm/BizBillmsgdetail.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizMsgtaskdetail.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizContractcustomer.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizContractbase.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizContractfee.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizContractactivity.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizContractfeature.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizContractshouliinfo.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizAutosubmit.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizCallplanpolicy.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysAreacode.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysSaleextinfo.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysOperate.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizMsgtasklist.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysCashspree.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizExtension.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizWorksheetprd.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/LnWorksheetprd.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizVoicemail.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizBlackcus.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysAgent.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysDepartment.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizSpecialapply.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizSpecialapplylog.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysPrdtemplate.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizBlacklist.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysDictionary.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizNumholdconfig.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizInvoiceinfo.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizInvoiceflowstatus.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizInvoiceflowtrace.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizPersondepatch.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysMobilenum.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizContactlog.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizWebcallconfig.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizPayonline.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizInvalidchance.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizChancemovelog.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizCustomermobile.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizRecord.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizBuyspree.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizBizcustomer.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizWorksheetflowstatus.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/LnWorksheetflowstatus.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizBranchbilling.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizNumhold.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizDispatchlog.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizAccountchangelog.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizWorksheetflowtrace.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/LnWorksheetflowtrace.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysRole.hbm.xml
+				</value>
+
+				<value>
+					com/union400/common/hbm/BizDatealert.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizMsgcharging.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizMsgrecord.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysCallplan.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysNumbersegment.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysMsgplan.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysRoleoperate.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysNumadmin.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizPlantypechange.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysCarrier.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysRolemodule.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysCcodareacode.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysMsgkeywordillegal.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysOnhookmsgtemplate.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizBillinginfo.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizVoipextension.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizSuvylog.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizNumoperate.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysAbroadcallplan.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysAbroadcallplanrate.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizChance.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizWorksheetbsc.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/LnWorksheetbsc.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizCustomermark.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizWavfile.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysFeecode.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysFeecode800.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysConfig.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizDiscountlog.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysIntlnumadmin.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizIntilcuspkginfo.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizPreChargelog.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizIntlplantypechange.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizWebcalllog.hbm.xml
+				</value>
+
+				<value>
+					com/union400/common/hbm/AppDepartment.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/AppUserinfo.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizFeedback.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysAgentnumadmin.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/AppTransfernum.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizCustomecardchecklog.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysSalesgroup.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizApi.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizApiCallbackUrl.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizApiDisplay.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizApiExtensions.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizApiTemplate.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizApiVoicecode.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/SysGatewayConfig.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizMsgTemplate.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/AppCallout.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/AppSpecialrates.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/AppStandrates.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizCountrycode.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/AppUpdateRecord.hbm.xml
+				</value>
+
+				<value>
+					com/union400/common/hbm/SysLnnumadmin.hbm.xml
+				</value>
+				<value>
+				    com/union400/common/hbm/LnForeignspecrate.hbm.xml
+				</value>
+				<value>
+				    com/union400/common/hbm/LnForeignstandrate.hbm.xml
+				</value>
+				<value>
+				    com/union400/common/hbm/LnLocalspecrate.hbm.xml
+				</value>
+				<value>
+				    com/union400/common/hbm/LnLocalstandrate.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/AppCalloperator.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/AppCommRecord.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/AppCustomer.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizIsblacknumber.hbm.xml
+				</value>
+				<value>
+				    com/union400/common/hbm/LnExtension.hbm.xml
+				</value>
+				<value>
+				    com/union400/common/hbm/LnTerminal.hbm.xml
+				</value>
+				<value>
+				    com/union400/common/hbm/BizMobielSelfUser.hbm.xml
+				</value>
+				<value>
+				 	com/union400/common/hbm/BizChancelink.hbm.xml
+				</value>
+				<value>
+				 	com/union400/common/hbm/BizMobielSelfDstnum.hbm.xml
+				</value>
+				<value>
+				 	com/union400/common/hbm/AppMac2num400.hbm.xml
+				</value>
+				<!-- <value>
+				    com/union400/common/hbm/AppImsi2num400.hbm.xml
+				</value> -->
+				 <value>
+				    com/union400/common/hbm/LnNumoperate.hbm.xml
+				</value> 
+				<value>
+					com/union400/common/hbm/LnValueaddedtype.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/LnBuyspree.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/LnCashspree.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/LnCustomerfeature.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/LnBillinginfo.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/LnConfigln.hbm.xml
+				</value>
+				<!-- <value>
+				   com/union400/common/hbm/VnMsgplan.hbm.xml
+				</value> -->
+				<!-- <value>
+				   com/union400/common/hbm/VnCallplan.hbm.xml
+				</value> -->
+				<value>
+				   com/union400/common/hbm/BizCallalert.hbm.xml
+				</value>
+				<value>
+				   com/union400/common/hbm/LnMsgplan.hbm.xml
+				</value>
+			 
+				<value>
+		 			com/union400/common/hbm/BizPhonecheck.hbm.xml
+	            		</value>
+				<!-- <value>
+					com/union400/common/hbm/AppCallconfig.hbm.xml
+				</value> -->
+				<value>
+					com/union400/common/hbm/BizObrates.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizContractactivityRefee.hbm.xml
+				</value>				
+				<value>
+					com/union400/common/hbm/BizContractbaseRefee.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizContractcustomerRefee.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizContractfeatureRefee.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizContractfeeRefee.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/BizContractshouliinfoRefee.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/AppImsi2num400.hbm.xml
+				</value>	
+				<value>
+					com/union400/common/hbm/AppCallconfig.hbm.xml
+				</value>
+				<value>
+					com/union400/common/hbm/AppUserloger.hbm.xml
+				</value>	
+				
+			 	<value>
+				   com/union400/common/hbm/VnMsgplan.hbm.xml
+				</value>
+				<value>
+				   com/union400/common/hbm/VnCallplan.hbm.xml
+				</value>
+				<value>
+				  com/union400/common/hbm/VnNumadmin.hbm.xml
+				</value>
+				<value>
+				  com/union400/common/hbm/BizMobileselfAd.hbm.xml
+				</value>
+			 	<value>
+					com/union400/common/hbm/SysActionconfig.hbm.xml
+				</value> 
+				<value>
+				  com/union400/common/hbm/AgBalancedetail.hbm.xml
+				</value>
+				<value>
+				  com/union400/common/hbm/AgRechargeRecoed.hbm.xml
+				</value>
+				<value>
+				  com/union400/common/hbm/AgBillinginfo.hbm.xml
+				</value>
+				<value>
+				  com/union400/common/hbm/AgCallplan.hbm.xml
+				</value>
+				<value>
+				  com/union400/common/hbm/AgMsgplan.hbm.xml
+				</value>
+				
+				<value>
+				    com/union400/common/hbm/LnAccountchangelog.hbm.xml
+				</value>	
+				<value>
+				  com/union400/common/hbm/BizTongchuanDestnum.hbm.xml
+				</value>
+				<value>
+				  com/union400/common/hbm/AgPackagecontact.hbm.xml
+				</value>
+				<value>
+				  com/union400/common/hbm/SysChangeWorksheet.hbm.xml
+				</value>
+				<value>
+				  com/union400/common/hbm/AppLogoandposterpage.hbm.xml
+				</value>
+				<value>
+				   com/union400/common/hbm/AppSystemnotification.hbm.xml
+				</value>
+				<value>
+				  com/union400/common/hbm/Biz263mobilenumber.hbm.xml				  
+				</value>
+				<value>
+					com/union400/common/hbm/BizRealBalance.hbm.xml
+				</value>
+				<value>
+				  com/union400/common/hbm/SysTznum400extend.hbm.xml				  
+				</value>
+				<value>
+				  com/union400/common/hbm/SysTzcustomerhistory.hbm.xml				  
+				</value>
+				<value>
+				  com/union400/common/hbm/SysTznumberconfighistory.hbm.xml				  
+				</value>
+					<value>
+				  com/union400/common/hbm/AgentWorksheetbsc.hbm.xml
+				</value>
+				<value>
+				  com/union400/common/hbm/LnIsblacknumber.hbm.xml				  
+				</value>
+				<value>
+				  com/union400/common/hbm/AgentWorksheetflowstatus.hbm.xml
+				</value>
+				<value>
+				  com/union400/common/hbm/AgentWorksheetflowtrace.hbm.xml
+				</value>	
+				<value>
+				  com/union400/common/hbm/AgentWorksheetfnc.hbm.xml
+				</value>
+				<value>
+				  com/union400/common/hbm/AgentWorksheetprd.hbm.xml
+				</value>
+				<value>
+				  com/union400/common/hbm/AppUserExinfo.hbm.xml
+				</value>
+				<value>
+				  com/union400/common/hbm/SysChancelog.hbm.xml
+				</value>
+				<value>
+				  com/union400/common/hbm/BizFxchance.hbm.xml
+				</value>
+				<value>
+				  com/union400/common/hbm/BizLogininfo.hbm.xml
+				</value>
+				<value>
+				  com/union400/common/hbm/AppServiceSms.hbm.xml
+				</value>
+				<value>
+				  com/union400/common/hbm/BizOutcall.hbm.xml
+				</value>
+				 <value>
+				  com/union400/common/hbm/SysMsgoperatorconfig.hbm.xml
+				</value>
+				</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					com.union400.common.util.XtbossDialect
+				</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="current_session_context_class">thread</prop>
+				<!--启用二级缓存 -->
+				<prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
+				<prop key="hibernate.cache.use_second_level_cache">false</prop>
+				<prop key="hibernate.cache.use_query_cache">false</prop>
+ 				<!-- 二级缓存配置文件的位置 -->
+        		<prop key="hibernate.cache.provider_configuration_file_resource_path">ehcache.xml</prop>
+			</props>
+		</property>
+	</bean>
+
+
+	<!-- 配置事务 -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+
+	<!-- 配置事务特性 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<!-- <tx:method name="get*" read-only="true" propagation="NOT_SUPPORTED" />
+			<tx:method name="find*" read-only="true" propagation="NOT_SUPPORTED" />
+			<tx:method name="search*" read-only="true" propagation="NOT_SUPPORTED" />
+			<tx:method name="query*" read-only="true" propagation="NOT_SUPPORTED" />
+			<tx:method name="createCriteria*" read-only="true" propagation="NOT_SUPPORTED" />
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="add*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="edit*" propagation="REQUIRED" />
+			<tx:method name="del*" propagation="REQUIRED" />
+			<tx:method name="remove*" propagation="REQUIRED" /> -->
+		    <tx:method name="*" propagation="REQUIRED" />
+		 </tx:attributes>
+	</tx:advice>
+
+
+	<!-- 配置哪些类的方法需要进行事务管理--> 
+	    <aop:config> 
+	       <aop:pointcut id="allTransactionMethod" 
+		       expression=" execution(* com..service.*.*(..))" /> 
+		   <aop:advisor advice-ref="txAdvice" 		      pointcut-ref="allTransactionMethod" /> 
+		</aop:config> 
+		
+		<aop:aspectj-autoproxy  proxy-target-class="true" /> 
+		<context:component-scan base-package="*" /> 
+
+	<!-- <import resource="classpath:config/com/*/*/spring/spring-*-*.xml" />
+	<import resource="classpath:config/com/*/*/*/spring/spring-*-*.xml" /> -->
+	<!-- 配置拦截器 -->
+	<!-- <bean name="logger" class="com.union400.aop.LoggingInterceptor" /> -->
+
+	<!-- 配置拦截器代理 -->
+	<!-- <bean name="loggingAutoProxy" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator"> 
+		<property name="beanNames"> <list> <value>/login</value> </list> </property> 
+		<property name="interceptorNames"> <list> <value>logger</value> </list> </property> 
+		</bean> -->
+
+</beans>
