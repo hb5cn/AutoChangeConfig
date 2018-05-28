@@ -12,6 +12,7 @@ from xml.etree import ElementTree
 class AutoChangeConfig(object):
     def __init__(self):
         self.modifypath = ''
+        self.notes_list = []
         # Changing the local path to the current text path
         os.chdir(os.path.split(os.path.realpath(__file__))[0])
         self.home = os.getcwd()
@@ -62,6 +63,7 @@ class AutoChangeConfig(object):
         # Select different functions according to the suffix
         try:
             if 'xml' == suffix:
+                self.lookupannotations(path, suffix)
                 self.modifyxml(path, changed)
             elif 'properties' == suffix:
                 self.modifyproperties(path, changed)
@@ -200,7 +202,7 @@ class AutoChangeConfig(object):
                     number_list.append(previous_line_num)
                 except Exception, xml_err:
                     if xml_err:
-                        print traceback.format_exc()
+                        pass
 
             # List the first lines that are really modified in the original text
             last_first_line = self.getlinenumber(number_list, first_line_num_list)
@@ -328,6 +330,22 @@ class AutoChangeConfig(object):
                 if restore_err:
                     self.loggerchangeconfig.error(traceback.format_exc())
         self.loggerchangeconfig.info('Restore config file done')
+
+    def lookupannotations(self, path, suffix):
+        with open(path, 'r') as fr:
+            notes_str = fr.readlines()
+        if 'xml' == suffix:
+            c_list = []
+            d_list = []
+            for n in range(0, len(notes_str)):
+                if str(notes_str[n]).find('<!--') >= 0:
+                    d_list.append(n)
+                if str(notes_str[n]).find('-->') >= 0:
+                    d_list.append(n)
+                    c_list.append(d_list)
+                    d_list = []
+            print c_list
+            self.notes_list = c_list
 
     def main(self):
         try:
