@@ -200,7 +200,7 @@ class AutoChangeConfig(object):
                     number_list.append(previous_line_num)
                 except Exception, xml_err:
                     if xml_err:
-                        pass
+                        print traceback.format_exc()
 
             # List the first lines that are really modified in the original text
             last_first_line = self.getlinenumber(number_list, first_line_num_list)
@@ -274,6 +274,8 @@ class AutoChangeConfig(object):
     def getlinenumber(self, num_list, first_line_num_list):
         d_value1 = 0
         last_first_num = 0
+        print num_list
+        print first_line_num_list
         for num in first_line_num_list:
             if num <= num_list[-1]:
                 d_value2 = int(num_list[-1]) - int(num)

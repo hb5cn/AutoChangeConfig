@@ -1,58 +1,57 @@
 <config>
     <modify>
         <file>E:/面试题/123/你好/applicationContext.xml</file>
-        <change><![CDATA[<property name="driverClassName">
-			<value>com.mysql.jdbc.Driver</value>
-		</property>
+        <change><![CDATA[<property name="url">
 
+			<value>jdbc:mysql://101.200.123.227:3306/xtboss?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;failOverReadOnly=false&amp;maxReconnects=20&amp;useOldAliasMetadataBehavior=true&amp;</value>
 
-		 <property name="url">
-  			<value>jdbc:mysql://1.1.1.1:3306/xtboss?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;failOverReadOnly=false&amp;maxReconnects=20&amp;useOldAliasMetadataBehavior=true&amp;
-			</value>
 		</property>
 		<property name="username">
-			<value>root1111111111</value>
+			<value>root</value>
 		</property>
 		<property name="password">
-			<value>union$))222222222</value>
-		</property>]]></change>
-        <change><![CDATA[<property name="hibernateProperties">
-			<props>
-				<prop key="hibernate.dialect">
-					www.baidu.com
-				</prop>
-				<prop key="hibernate.show_sql">1111111111111</prop>
-				<prop key="current_session_context_class">23213213213</prop>
 
- 				<!-- 二级缓存配置文件的位置 -->
-        		<prop key="hibernate.cache.provider_configuration_file_resource_path">ehcache.xml</prop>]]></change>
+			<value>union$))</value>
+
+
+		</property>]]></change>
+        <!--<change><![CDATA[<property name="hibernateProperties">-->
+			<!--<props>-->
+				<!--<prop key="hibernate.dialect">-->
+					<!--www.baidu.com-->
+				<!--</prop>-->
+				<!--<prop key="hibernate.show_sql">1111111111111</prop>-->
+				<!--<prop key="current_session_context_class">23213213213</prop>-->
+
+ 				<!--&lt;!&ndash; 二级缓存配置文件的位置 &ndash;&gt;-->
+        		<!--<prop key="hibernate.cache.provider_configuration_file_resource_path">ehcache.xml</prop>]]></change>-->
     </modify>
-    <modify>
-        <file>D:/测试数据/333/213/你好/resource.properties</file>
-        <change>BillingServip=2.2.2.2</change>
-        <change>BillingServport=1111</change>
-        <change>hello=hello111111111111111</change>
-        <change>everyone=hello222222</change>
-    </modify>
-    <modify>
-        <file>D:/测试数据/333/213/你好/libnet.cfg</file>
-        <change>        'ftp_int_passive' => hello,</change>
-        <change>        'test_hosts' => yes,</change>
-        <change>        'hello_everyone' => hello,</change>
-        <change>        '123456789' => qweqweqweqweqwe,</change>
-    </modify>
-    <modify>
-        <file>D:/测试数据/333/213/你好/123.ini</file>
-        <change>NoOfReplicas: hellohello</change>
-        <change>DataMemory: lalalalalalalala</change>
-        <change>1122334: hello112233</change>
-        <change>helloeveryone: helloqqqqqqqqqqqqqqqqqqqqqqqqqqq</change>
-    </modify>
-    <modify>
-        <file>E:/面试题/123/你好/config.small.ini</file>
-        <nodename>API</nodename>
-        <change>NoOfReplicas: nihao</change>
-        <change>DataMemory: lalalalalalalala</change>
-        <change>Id: hello</change>
-    </modify>
+    <!--<modify>-->
+        <!--<file>D:/测试数据/333/213/你好/resource.properties</file>-->
+        <!--<change>BillingServip=2.2.2.2</change>-->
+        <!--<change>BillingServport=1111</change>-->
+        <!--<change>hello=hello111111111111111</change>-->
+        <!--<change>everyone=hello222222</change>-->
+    <!--</modify>-->
+    <!--<modify>-->
+        <!--<file>D:/测试数据/333/213/你好/libnet.cfg</file>-->
+        <!--<change>        'ftp_int_passive' => hello,</change>-->
+        <!--<change>        'test_hosts' => yes,</change>-->
+        <!--<change>        'hello_everyone' => hello,</change>-->
+        <!--<change>        '123456789' => qweqweqweqweqwe,</change>-->
+    <!--</modify>-->
+    <!--<modify>-->
+        <!--<file>D:/测试数据/333/213/你好/123.ini</file>-->
+        <!--<change>NoOfReplicas: hellohello</change>-->
+        <!--<change>DataMemory: lalalalalalalala</change>-->
+        <!--<change>1122334: hello112233</change>-->
+        <!--<change>helloeveryone: helloqqqqqqqqqqqqqqqqqqqqqqqqqqq</change>-->
+    <!--</modify>-->
+    <!--<modify>-->
+        <!--<file>E:/面试题/123/你好/config.small.ini</file>-->
+        <!--<nodename>API</nodename>-->
+        <!--<change>NoOfReplicas: nihao</change>-->
+        <!--<change>DataMemory: lalalalalalalala</change>-->
+        <!--<change>Id: hello</change>-->
+    <!--</modify>-->
 </config>
