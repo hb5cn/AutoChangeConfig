@@ -1,20 +1,20 @@
 <config>
-    <modify>
-        <file>E:/面试题/123/你好/applicationContext.xml</file>
-        <change><![CDATA[<property name="url">
+    <!--<modify>-->
+        <!--<file>E:/面试题/123/你好/applicationContext.xml</file>-->
+        <!--<change><![CDATA[		<property name="url">-->
 
-			<value>jdbc:mysql://101.200.123.227:3306/xtboss?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;failOverReadOnly=false&amp;maxReconnects=20&amp;useOldAliasMetadataBehavior=true&amp;</value>
+			<!--<value>jdbc:mysql://101.200.123.227:3306/xtboss?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;failOverReadOnly=false&amp;maxReconnects=20&amp;useOldAliasMetadataBehavior=true&amp;</value>-->
 
-		</property>
-		<property name="username">
-			<value>root</value>
-		</property>
-		<property name="password">
+		<!--</property>-->
+		<!--<property name="username">-->
+			<!--<value>root</value>-->
+		<!--</property>-->
+		<!--<property name="password">-->
 
-			<value>union$))</value>
+			<!--<value>union$))</value>-->
 
 
-		</property>]]></change>
+		<!--</property>]]></change>-->
         <!--<change><![CDATA[<property name="hibernateProperties">-->
 			<!--<props>-->
 				<!--<prop key="hibernate.dialect">-->
@@ -25,14 +25,21 @@
 
  				<!--&lt;!&ndash; 二级缓存配置文件的位置 &ndash;&gt;-->
         		<!--<prop key="hibernate.cache.provider_configuration_file_resource_path">ehcache.xml</prop>]]></change>-->
-    </modify>
+    <!--</modify>-->
     <!--<modify>-->
         <!--<file>D:/测试数据/333/213/你好/resource.properties</file>-->
         <!--<change>BillingServip=2.2.2.2</change>-->
         <!--<change>BillingServport=1111</change>-->
-        <!--<change>hello=hello111111111111111</change>-->
-        <!--<change>everyone=hello222222</change>-->
     <!--</modify>-->
+    <modify>
+        <file>D:/测试数据/333/213/你好/alipay.properties</file>
+        <change>alipay.notify_url=http\://10.10.16.61:8083/notifyAlipay.do</change>
+        <change>alipay.return_url=http\://10.10.16.61:8083/returnAlipay.do</change>
+        <change>ln_alipay.notify_url=http\://10.10.16.61:8083/xtboss/ln_notifyAlipay.do</change>
+        <change>ln_alipay.return_url=http\://10.10.16.61:8083/xtboss/ln_returnAlipay.do</change>
+        <change>did_alipay.notify_url=http\://10.10.16.61:8083/xtboss/did_notifyAlipay.do</change>
+        <change>did_alipay.return_url=http\://10.10.16.61:8083/xtboss/did_returnAlipay.do</change>
+    </modify>
     <!--<modify>-->
         <!--<file>D:/测试数据/333/213/你好/libnet.cfg</file>-->
         <!--<change>        'ftp_int_passive' => hello,</change>-->
