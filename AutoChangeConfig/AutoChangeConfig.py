@@ -365,7 +365,8 @@ class AutoChangeConfig(object):
                 if 'AutoChangeConfig.xml' == os.path.basename(restore_path):
                     continue
                 self.loggerchangeconfig.info('Now restore \"%s\"' % restore_path)
-                shutil.copyfile(os.path.join(backup_file_path, os.path.basename(restore_path)), restore_path.decode('utf-8'))
+                shutil.copyfile(os.path.join(backup_file_path,
+                                             os.path.basename(restore_path)), restore_path.decode('utf-8'))
             except Exception, restore_err:
                 if restore_err:
                     self.loggerchangeconfig.error(traceback.format_exc())
