@@ -1,0 +1,78 @@
+<config>
+    <!--<modify>-->
+        <!--<file>/tomcat_8083/webapps/xtboss/WEB-INF/classes/applicationContext.xml</file>-->
+        <!--<change><![CDATA[<property name="url">-->
+
+			<!--<value>jdbc:mysql://101.200.123.227:3306/xtboss?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;failOverReadOnly=false&amp;maxReconnects=20&amp;useOldAliasMetadataBehavior=true&amp;</value>-->
+
+		<!--</property>-->
+		<!--<property name="username">-->
+			<!--<value>root</value>-->
+		<!--</property>-->
+		<!--<property name="password">-->
+
+			<!--<value>union$))</value>-->
+
+
+		<!--</property>]]></change>-->
+    <!--</modify>-->
+    <!--<modify>-->
+        <!--<file>/tomcat_8083/webapps/xtboss/WEB-INF/classes/alipay.properties</file>-->
+        <!--<change>alipay.notify_url=http\://10.10.16.61:8083/notifyAlipay.do</change>-->
+        <!--<change>alipay.return_url=http\://10.10.16.61:8083/returnAlipay.do</change>-->
+        <!--<change>ln_alipay.notify_url=http\://10.10.16.61:8083/xtboss/ln_notifyAlipay.do</change>-->
+        <!--<change>ln_alipay.return_url=http\://10.10.16.61:8083/xtboss/ln_returnAlipay.do</change>-->
+        <!--<change>did_alipay.notify_url=http\://10.10.16.61:8083/xtboss/did_notifyAlipay.do</change>-->
+        <!--<change>did_alipay.return_url=http\://10.10.16.61:8083/xtboss/did_returnAlipay.do</change>-->
+    <!--</modify>-->
+    <!--<modify>-->
+        <!--<file>/tomcat_8083/webapps/xtboss/WEB-INF/classes/msg.properties</file>-->
+        <!--<change>msg.url=http\://10.10.16.61:8083/xtboss/msgInterFace.do</change>-->
+        <!--<change><![CDATA[appmsg.url=http\://10.10.16.61:8083/xtboss/msgInterFace.do?oneselfSurfix\=1&carry\=2]]></change>-->
+    <!--</modify>-->
+    <!--<modify>-->
+        <!--<file>/tomcat_8083/webapps/xtboss/WEB-INF/classes/redis.properties</file>-->
+        <!--<change>server=101.200.123.227</change>-->
+    <!--</modify>-->
+    <!--<modify>-->
+        <!--<file>/tomcat_8083/webapps/xtboss/WEB-INF/classes/resource.properties</file>-->
+        <!--<change>BillingServip=10.10.16.61</change>-->
+        <!--<change>BillingServport=8083</change>-->
+        <!--<change>XtBossServip=10.10.16.61</change>-->
+        <!--<change>XtBossServport=8083</change>-->
+        <!--<change><![CDATA[msgUrl=http\://10.10.16.61:8083/xtboss/msgInterFace.do?oneselfSurfix\=1&carry\=2]]></change>-->
+        <!--<change>msgSendIntefaceIp=127.0.0.1|119.254.95.194|124.152.158.39|10.10.16.61|</change>-->
+        <!--<change>SelfServiceVoiceRootUrl=http://10.10.16.61:8083/xtboss/union400/upload/</change>-->
+        <!--<change>zfw_domain=http://10.10.16.61:8083/xtboss</change>-->
+    <!--</modify>-->
+    <!--<modify>-->
+        <!--<file>/tomcat_8083/webapps/xtbilling/WEB-INF/classes/applicationContext.xml</file>-->
+        <!--<change><![CDATA[<bean id="dataSource"-->
+                <!--class="org.apache.commons.dbcp.BasicDataSource"-->
+                <!--destroy-method="close">-->
+                <!--<property name="driverClassName">-->
+                        <!--<value>oracle.jdbc.OracleDriver</value>-->
+                <!--</property>-->
+
+                <!--<property name="url">-->
+                        <!--<value>jdbc:oracle:thin:@123.57.180.25:1521:boss</value>-->
+                <!--</property>-->
+                <!--<property name="username">-->
+                        <!--<value>usboss42</value>-->
+                <!--</property>-->
+                <!--<property name="password">-->
+                        <!--<value>USBOSS42</value>-->
+                <!--</property>-->
+            <!--]]></change>-->
+    <!--</modify>-->
+    <!--<modify>-->
+        <!--<file>/tomcat_8083/webapps/xtbilling/WEB-INF/classes/resource.properties</file>-->
+        <!--<change>XtBossServip=10.10.16.61</change>-->
+        <!--<change>XtBossServport=8083</change>-->
+        <!--<change>xtbillingUrl=http://10.10.16.61:8083</change>-->
+    <!--</modify>-->
+    <modify>
+        <file>D:/测试数据/333/213/你好/alipay.properties</file>
+        <change>alipay.partner=aaaaaaaaaaaaaaa</change>
+    </modify>
+</config>

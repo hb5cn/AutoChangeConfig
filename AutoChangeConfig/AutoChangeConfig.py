@@ -194,7 +194,11 @@ class AutoChangeConfig(object):
             number_list = []
             first_line_num_list = []
             previous_line_num = 0
-            change_str.text = change_str.text.encode('utf-8')
+            try:
+                change_str.text = change_str.text.encode('utf-8')
+            except Exception, xml_err:
+                if xml_err:
+                    change_str.text = change_str.text
             # Remove the tab to modify the content and cut it by line.
             a_list = str(change_str.text).replace('\t', '').splitlines()
             for a_list_str in a_list:
@@ -310,6 +314,7 @@ class AutoChangeConfig(object):
         return last_first_num
 
     def backupconfig(self, path):
+        n = 0
         backupfloder = self.backupfloder
         self.loggerchangeconfig.info('Begin Backup \"%s\"' % path)
         # Create backup floder
@@ -318,17 +323,30 @@ class AutoChangeConfig(object):
 
         backupfloder_now = os.path.join(backupfloder, '%s' % self.time_now)
 
-        if 'AutoChangeConfig.xml' == os.path.basename(path):
-            backupfloder_now = os.path.join(backupfloder_now, 'AutoChangeConfig')
-
         # Create backup Subfolder
         if not os.path.exists(backupfloder_now):
             os.mkdir(backupfloder_now)
 
+        while True:
+            backupfloder_now_new = os.path.join(backupfloder_now, 'backup%d' % n)
+            if not os.path.exists(backupfloder_now_new):
+                os.mkdir(backupfloder_now_new)
+                break
+            else:
+                n += 1
+
         # Backup config file
         if os.path.exists(path):
-            backupfile_path = os.path.join(backupfloder_now, os.path.basename(path))
+            backupfile_path = os.path.join(backupfloder_now_new, os.path.basename(path))
             shutil.copyfile(path, backupfile_path)
+            backup_path_path = os.path.join(backupfloder_now_new, 'path')
+            with open(backup_path_path, 'wb') as fw:
+                try:
+                    # fw.write(path)
+                    fw.write(path.encode('utf-8'))
+                except Exception, backup_err:
+                    if backup_err:
+                        fw.write(path)
 
         self.loggerchangeconfig.info('Backup \"%s\" done' % path)
 
@@ -339,13 +357,15 @@ class AutoChangeConfig(object):
             return
 
         # restore the backup file
-        xmlroot_restore = ElementTree.parse(os.path.join(backupfloder_restore, 'AutoChangeConfig/AutoChangeConfig.xml'))
-        for modify_node in xmlroot_restore.findall('./modify'):
-            modified_file_path = modify_node.find('file').text
-            backup_file_path = os.path.join(backupfloder_restore, os.path.basename(modified_file_path))
-            self.loggerchangeconfig.info('Now restore \"%s\"' % modified_file_path)
+        for p in range(0, len(os.listdir(backupfloder_restore))):
+            backup_file_path = os.path.join(backupfloder_restore, 'backup%d' % p)
+            with open(os.path.join(backup_file_path, 'path'), 'rb') as fr:
+                restore_path = fr.read()
             try:
-                shutil.copyfile(backup_file_path, modified_file_path)
+                if 'AutoChangeConfig.xml' == os.path.basename(restore_path):
+                    continue
+                self.loggerchangeconfig.info('Now restore \"%s\"' % restore_path)
+                shutil.copyfile(os.path.join(backup_file_path, os.path.basename(restore_path)), restore_path.decode('utf-8'))
             except Exception, restore_err:
                 if restore_err:
                     self.loggerchangeconfig.error(traceback.format_exc())
