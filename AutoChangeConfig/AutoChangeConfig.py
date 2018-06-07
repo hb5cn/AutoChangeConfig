@@ -227,7 +227,7 @@ class AutoChangeConfig(object):
 
             # List the first lines that are really modified in the original text
             last_first_line = self.getlinenumber(number_list, first_line_num_list)
-            if 0 == last_first_line:
+            if -1 == last_first_line:
                 self.loggerchangeconfig.error('Can\'t find content, please check your configuration')
                 return
 
@@ -299,7 +299,7 @@ class AutoChangeConfig(object):
 
     def getlinenumber(self, num_list, first_line_num_list):
         d_value1 = 0
-        last_first_num = 0
+        last_first_num = -1
         # print num_list
         # print first_line_num_list
         for num in first_line_num_list:
