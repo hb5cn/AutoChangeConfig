@@ -234,7 +234,7 @@ class AutoChangeConfig(object):
             with open(path, 'rb') as fr:
                 c_list = fr.readlines()
 
-            for m in range(0, len(str(change_str.text).splitlines(True)) - 1):
+            for m in range(0, len(str(change_str.text).splitlines(True))):
                 # Modify the corresponding content in the original text
                 if m == len(str(change_str.text).splitlines(True)) - 1:
                     str(change_str.text).splitlines(True)[m] += '\n'
