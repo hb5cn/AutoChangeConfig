@@ -17,6 +17,7 @@ class AutoChangeConfig(object):
         self.other_notes_list = []
         self.ini_notes_list = []
         self.ini_notes_tmp_list = []
+        self.config_file = 'AutoChangeConfig.xml'
         # Changing the local path to the current text path
         os.chdir(os.path.split(os.path.realpath(__file__))[0])
         self.home = os.getcwd()
@@ -38,7 +39,7 @@ class AutoChangeConfig(object):
         self.loggerchangeconfig.addHandler(logscr)
 
         # Read xml
-        self.xmlroot = ElementTree.parse('AutoChangeConfig.xml')
+        self.xmlroot = ElementTree.parse(self.config_file)
 
         # Initialization Delimiter
         self.delimiter = [':', '=', '》', '>', '-》', '->', '=>', '=》']
@@ -53,6 +54,7 @@ class AutoChangeConfig(object):
     def readconfig(self):
         # Get path, suffix, and modify content from configuration file
         self.loggerchangeconfig.info('Begin Read Config xml')
+        self.loggerchangeconfig.info('Config xml now is %s' % str(self.config_file))
         for modify_node in self.xmlroot.findall('./modify'):
             modify_file_path = modify_node.find('file').text
             modify_file_suffix = str(os.path.basename(modify_node.find('file').text)).split('.')[-1]
@@ -60,7 +62,7 @@ class AutoChangeConfig(object):
             self.dispatch(modify_file_suffix, modify_file_path, modify_node.findall('change'), modify_node)
 
         # Backup AutoChangeConfig config file
-        auto_cfg_file = os.path.join(self.home, 'AutoChangeConfig.xml')
+        auto_cfg_file = os.path.join(self.home, self.config_file)
         self.backupconfig(auto_cfg_file)
 
     def dispatch(self, suffix, path, changed, modify_node):
@@ -234,11 +236,12 @@ class AutoChangeConfig(object):
             with open(path, 'rb') as fr:
                 c_list = fr.readlines()
 
-            for m in range(0, len(str(change_str.text).splitlines(True))):
+            lastchange_list = str(change_str.text).splitlines(True)
+            for m in range(0, len(lastchange_list)):
                 # Modify the corresponding content in the original text
-                if m == len(str(change_str.text).splitlines(True)) - 1:
-                    str(change_str.text).splitlines(True)[m] += '\n'
-                c_list[last_first_line+m] = str(change_str.text).splitlines(True)[m]
+                if m == len(lastchange_list) - 1:
+                    lastchange_list[m] += '\r\n'
+                c_list[last_first_line+m] = lastchange_list[m]
 
             with open(path, 'wb') as fw:
                 fw.writelines(c_list)
@@ -438,9 +441,16 @@ class AutoChangeConfig(object):
                 if 14 == len(command1):
                     self.restorebackup(command1)
                 else:
-                    self.loggerchangeconfig.info('Please modify the configuration file as needed\n')
-            else:
+                    self.loggerchangeconfig.info('The backup file name is error\n')
+            elif str(command1).find('AutoChangeConfig') >= 0:
+                if not os.path.exists(command1):
+                    self.loggerchangeconfig.error('The path is not exists.')
+                    return
+                self.config_file = str(command1)
+                self.xmlroot = ElementTree.parse(self.config_file)
                 self.readconfig()
+            else:
+                self.loggerchangeconfig.error('The parameter is wrong.')
         except Exception, main_err:
             if main_err:
                 self.readconfig()
